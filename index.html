@@ -82,6 +82,27 @@
         .nav-links a:hover, .nav-links a.active {
             background: var(--green-soft); color: var(--green-dark);
         }
+        
+                /* BOTÃO PORTAL — DESTAQUE NO MENU */
+        .nav-links .nav-portal-btn {
+            background: var(--green-main) !important;
+            color: var(--white) !important;
+            font-weight: 700;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+        }
+       .nav-links .nav-portal-btn:hover {
+            background: var(--green-dark) !important;
+            color: var(--white) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(27, 94, 32, 0.4);
+        }
+
         .nav-toggle {
             display: none; background: none; border: none;
             font-size: 1.5rem; color: var(--gray-700); cursor: pointer;
@@ -296,6 +317,11 @@
             .flow-diagram { flex-direction: column; }
             .flow-arrow { transform: rotate(90deg); }
             .screenshot-gallery.cols-2 { grid-template-columns: 1fr; }
+            .nav-links .nav-portal-btn {
+                text-align: center;
+                justify-content: center;
+                margin-top: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -308,13 +334,14 @@
             <span>Lab Maker</span>
         </a>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#o-que-e">O que é</a></li>
-            <li><a href="#formularios">Formulários</a></li>
-            <li><a href="#dash-pedagogico">Pedagógico</a></li>
-            <li><a href="#dash-inventario">Inventário</a></li>
-            <li><a href="#estrutura">Estrutura</a></li>
-            <li><a href="#proximos-passos">Próximos Passos</a></li>
-        </ul>
+    <li><a href="#o-que-e">O que é</a></li>
+    <li><a href="#formularios">Formulários</a></li>
+    <li><a href="#dash-pedagogico">Pedagógico</a></li>
+    <li><a href="#dash-inventario">Inventário</a></li>
+    <li><a href="#estrutura">Estrutura</a></li>
+    <li><a href="#proximos-passos">Próximos Passos</a></li>
+    <li><a href="portal.html" class="nav-portal-btn"><i class="fas fa-door-open"></i> Portal</a></li>
+</ul>
         <button class="nav-toggle" id="navToggle" aria-label="Menu">
             <i class="fas fa-bars"></i>
         </button>
