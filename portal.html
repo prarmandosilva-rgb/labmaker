@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Lab Maker — EEB Elfrida Cristino da Silva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --green-dark: #1B5E20;
+            --green-main: #2E7D32;
+            --green-light: #4CAF50;
+            --green-soft: #E8F5E9;
+            --blue-dark: #0D47A1;
+            --blue-main: #1565C0;
+            --blue-light: #42A5F5;
+            --blue-soft: #E3F2FD;
+            --gold: #F9A825;
+            --gold-light: #FFF8E1;
+            --red-alert: #C62828;
+            --red-soft: #FFEBEE;
+            --orange: #EF6C00;
+            --orange-soft: #FFF3E0;
+            --purple: #7B1FA2;
+            --purple-soft: #F3E5F5;
+            --gray-900: #212121;
+            --gray-700: #616161;
+            --gray-500: #9E9E9E;
+            --gray-300: #E0E0E0;
+            --gray-100: #F5F5F5;
+            --white: #FFFFFF;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            --shadow-xl: 0 12px 40px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--gray-300);
+            padding: 0 2rem; height: 70px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: var(--shadow-md);
+        }
+        .navbar-brand {
+            display: flex; align-items: center; gap: 12px;
+            text-decoration: none; color: var(--green-dark);
+            font-weight: 700; font-size: 1.1rem;
+        }
+        .navbar-brand .icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--green-main), var(--blue-main));
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.2rem;
+        }
+        .nav-links { display: flex; gap: 0.5rem; list-style: none; align-items: center; }
+        .nav-links a {
+            text-decoration: none; color: var(--gray-700);
+            font-size: 0.85rem; font-weight: 500;
+            padding: 0.5rem 1rem; border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        .nav-links a:hover {
+            background: var(--green-soft); color: var(--green-dark);
+        }
+        .nav-links .nav-portal-btn {
+            background: var(--green-main) !important;
+            color: var(--white) !important;
+            font-weight: 700;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+        }
+        .nav-links .nav-portal-btn:hover {
+            background: var(--green-dark) !important;
+            color: var(--white) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(27, 94, 32, 0.4);
+        }
+        .nav-toggle {
+            display: none; background: none; border: none;
+            font-size: 1.5rem; color: var(--gray-700); cursor: pointer;
+        }
+
+        /* HERO PORTAL */
+        .portal-hero {
+            padding-top: 70px;
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--blue-dark) 100%);
+            position: relative; overflow: hidden;
+        }
+        .portal-hero::before {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: 80%; height: 200%;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.05) 0%, transparent 70%);
+        }
+        .portal-hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        .portal-hero-content {
+            position: relative; z-index: 2;
+            text-align: center; color: white;
+            padding: 3.5rem 2rem 3rem;
+        }
+        .portal-hero-content .portal-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.4rem 1rem; border-radius: 50px;
+            font-size: 0.8rem; font-weight: 500; margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        .portal-badge .dot {
+            width: 8px; height: 8px; background: var(--gold);
+            border-radius: 50%; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .portal-hero-content h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 800; margin-bottom: 0.5rem;
+        }
+        .portal-hero-content h1 .highlight {
+            background: linear-gradient(135deg, var(--gold), #FFD54F);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .portal-hero-content p {
+            font-size: 1rem; opacity: 0.85; max-width: 550px; margin: 0 auto;
+        }
+
+        /* CARDS SECTION */
+        .portal-cards-section {
+            padding: 3rem 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        /* CARD BASE */
+        .portal-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--gray-300);
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        .portal-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .portal-card-header {
+            padding: 2rem 1.5rem 1.2rem;
+            text-align: center;
+            position: relative;
+        }
+        .portal-card-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+        }
+        .card-professor .portal-card-header::before { background: linear-gradient(90deg, var(--green-main), var(--green-light)); }
+        .card-aluno .portal-card-header::before { background: linear-gradient(90deg, var(--blue-main), var(--blue-light)); }
+        .card-dashboards .portal-card-header::before { background: linear-gradient(90deg, var(--orange), var(--gold)); }
+
+        .portal-card-icon {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; color: white;
+            margin: 0 auto 1rem;
+            box-shadow: var(--shadow-md);
+        }
+        .card-professor .portal-card-icon { background: linear-gradient(135deg, var(--green-main), var(--green-dark)); }
+        .card-aluno .portal-card-icon { background: linear-gradient(135deg, var(--blue-main), var(--blue-dark)); }
+        .card-dashboards .portal-card-icon { background: linear-gradient(135deg, var(--orange), #E65100); }
+
+        .portal-card-header h2 {
+            font-size: 1.2rem; font-weight: 700; margin-bottom: 0.3rem;
+        }
+        .portal-card-header p {
+            font-size: 0.85rem; color: var(--gray-500);
+        }
+
+        .portal-card-body {
+            padding: 0 1.5rem 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .portal-link {
+            display: flex; align-items: center; gap: 12px;
+            padding: 0.85rem 1rem;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--gray-900);
+            transition: var(--transition);
+        }
+        .portal-link:hover {
+            border-color: var(--green-main);
+            box-shadow: var(--shadow-sm);
+            transform: translateX(4px);
+        }
+        .card-aluno .portal-link:hover {
+            border-color: var(--blue-main);
+        }
+        .card-dashboards .portal-link:hover {
+            border-color: var(--orange);
+        }
+
+        .portal-link-icon {
+            width: 40px; height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; color: white;
+            flex-shrink: 0;
+        }
+        .portal-link-text h4 {
+            font-size: 0.9rem; font-weight: 600; line-height: 1.3;
+        }
+        .portal-link-text p {
+            font-size: 0.75rem; color: var(--gray-500); line-height: 1.3;
+        }
+        .portal-link .link-arrow {
+            margin-left: auto;
+            color: var(--gray-300);
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+        .portal-link:hover .link-arrow {
+            color: var(--green-main);
+        }
+        .card-aluno .portal-link:hover .link-arrow {
+            color: var(--blue-main);
+        }
+        .card-dashboards .portal-link:hover .link-arrow {
+            color: var(--orange);
+        }
+
+        /* CARD COLORS - LINK ICONS */
+        .icon-green { background: var(--green-main); }
+        .icon-blue { background: var(--blue-main); }
+        .icon-orange { background: var(--orange); }
+        .icon-purple { background: var(--purple); }
+        .icon-gold { background: var(--gold); }
+        .icon-red { background: var(--red-alert); }
+
+        /* INFO BAR */
+        .portal-info {
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+            padding: 0 2rem;
+        }
+        .portal-info-bar {
+            background: var(--green-soft);
+            border: 1px solid #C8E6C9;
+            border-radius: var(--radius-md);
+            padding: 1rem 1.5rem;
+            display: flex; align-items: center; gap: 12px;
+            font-size: 0.85rem; color: var(--green-dark);
+        }
+        .portal-info-bar i {
+            font-size: 1.2rem; flex-shrink: 0;
+        }
+        .portal-info-bar strong { font-weight: 700; }
+
+        /* FOOTER */
+        .footer {
+            background: var(--gray-900);
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.85rem;
+        }
+        .footer strong { color: white; }
+        .footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
+        .footer a:hover { color: white; text-decoration: underline; }
+
+        /* RESPONSIVE */
+        @media (max-width: 968px) {
+            .portal-grid {
+                grid-template-columns: 1fr;
+                max-width: 480px;
+                margin: 0 auto;
+            }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; position: absolute; top: 70px; left: 0; right: 0;
+                background: var(--white); flex-direction: column; padding: 1rem;
+                box-shadow: var(--shadow-lg); border-bottom: 1px solid var(--gray-300);
+            }
+            .nav-links.open { display: flex; }
+            .nav-toggle { display: block; }
+            .nav-links .nav-portal-btn {
+                text-align: center;
+                justify-content: center;
+                margin-top: 0.5rem;
+            }
+            .portal-hero-content { padding: 2.5rem 1.5rem 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <div class="icon"><i class="fas fa-cogs"></i></div>
+            <span>Lab Maker</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html"><i class="fas fa-arrow-left"></i> Site Principal</a></li>
+            <li><a href="portal.html" class="nav-portal-btn"><i class="fas fa-door-open"></i> Portal</a></li>
+        </ul>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="portal-hero">
+        <div class="portal-hero-grid"></div>
+        <div class="portal-hero-content">
+            <div class="portal-badge">
+                <span class="dot"></span>
+                Sistema em Homologação — Fase 1
+            </div>
+            <h1><span class="highlight">Portal</span> Lab Maker</h1>
+            <p>Acesso rápido a formulários e dashboards.<br>Selecione seu perfil abaixo.</p>
+        </div>
+    </section>
+
+    <!-- INFO BAR -->
+    <div class="portal-info" style="margin-top: 2rem;">
+        <div class="portal-info-bar">
+            <i class="fas fa-flask"></i>
+            <span><strong>Modo Homologação:</strong> Os dados atuais são fictícios. Pode explorar à vontade — na ativação real, tudo será limpo e começará do zero.</span>
+        </div>
+    </div>
+
+    <!-- CARDS -->
+    <section class="portal-cards-section">
+        <div class="portal-grid">
+
+            <!-- CARD PROFESSOR -->
+            <div class="portal-card card-professor">
+                <div class="portal-card-header">
+                    <div class="portal-card-icon"><i class="fas fa-chalkboard-user"></i></div>
+                    <h2>Professor</h2>
+                    <p>Agende aulas e avalie por rubrica</p>
+                </div>
+                <div class="portal-card-body">
+                    <a href="https://docs.google.com/forms/d/1CaMk6v9-dtASZVvNP584tMvH4BOnGv6ychngxJJKuaY/viewform" target="_blank" class="portal-link">
+                        <div class="portal-link-icon icon-green"><i class="fas fa-calendar-check"></i></div>
+                        <div class="portal-link-text">
+                            <h4>Agendamento de Aula</h4>
+                            <p>Reserve a Sala Maker com turma, data e materiais</p>
+                        </div>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://docs.google.com/forms/d/1aHwqmBnXZDuJwz8pouXSkmZTvftBa6SygNF-V55nJdI/viewform" target="_blank" class="portal-link">
+                        <div class="portal-link-icon icon-green"><i class="fas fa-star-half-alt"></i></div>
+                        <div class="portal-link-text">
+                            <h4>Avaliação por Rubrica</h4>
+                            <p>Avalie alunos por critérios objetivos</p>
+                        </div>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- CARD ALUNO -->
+            <div class="portal-card card-aluno">
+                <div class="portal-card-header">
+                    <div class="portal-card-icon"><i class="fas fa-user-graduate"></i></div>
+                    <h2>Aluno</h2>
+                    <p>Registre e reflita sobre seu aprendizado</p>
+                </div>
+                <div class="portal-card-body">
+                    <a href="https://docs.google.com/forms/d/1GZ3xx95w1CsccxMryswrF3ck3vLyobcpol5IOrN4dQE/viewform" target="_blank" class="portal-link">
+                        <div class="portal-link-icon icon-blue"><i class="fas fa-book-open"></i></div>
+                        <div class="portal-link-text">
+                            <h4>Diário de Bordo</h4>
+                            <p>Registre o que fez, aprendeu e os próximos passos</p>
+                        </div>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="https://docs.google.com/forms/d/1V6X0RS1CoXzo_L6R6W1mYbQFXdZAll6xmlHCRTz2rb8/viewform" target="_blank" class="portal-link">
+                        <div class="portal-link-icon icon-purple"><i class="fas fa-user-check"></i></div>
+                        <div class="portal-link-text">
+                            <h4>Autoavaliação</h4>
+                            <p>Avalie seu próprio desempenho e contribuição</p>
+                        </div>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- CARD DASHBOARDS -->
+            <div class="portal-card card-dashboards">
+                <div class="portal-card-header">
+                    <div class="portal-card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h2>Dashboards</h2>
+                    <p>Dados em tempo real para todos os perfis</p>
+                </div>
+                <div class="portal-card-body">
+                    <a href="index.html#dash-pedagogico" class="portal-link">
+                        <div class="portal-link-icon icon-orange"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="portal-link-text">
+                            <h4>Pedagógico</h4>
+                            <p>Rubrica, autoavaliação e triangulação</p>
+                        </div>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="index.html#dash-inventario" class="portal-link">
+                        <div class="portal-link-icon icon-gold"><i class="fas fa-boxes-stacked"></i></div>
+                        <div class="portal-link-text">
+                            <h4>Inventário</h4>
+                            <p>Estoque, alertas, empréstimos e projetos</p>
+                        </div>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>
+            <strong>Lab Maker</strong> — EEB Elfrida Cristino da Silva — Itajaí/SC<br>
+            <a href="index.html">← Voltar ao site principal</a><br>
+            <span style="opacity:0.5; font-size:0.75rem;">Versão de demonstração — Dados fictícios — Março 2026</span>
+        </p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        document.getElementById('navToggle').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+    </script>
+
+</body>
+</html>
