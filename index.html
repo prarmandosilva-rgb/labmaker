@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Maker — EEB Elfrida Cristino da Silva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --green-dark: #1B5E20;
+            --green-main: #2E7D32;
+            --green-light: #4CAF50;
+            --green-soft: #E8F5E9;
+            --blue-dark: #0D47A1;
+            --blue-main: #1565C0;
+            --blue-light: #42A5F5;
+            --blue-soft: #E3F2FD;
+            --gold: #F9A825;
+            --gold-light: #FFF8E1;
+            --red-alert: #C62828;
+            --red-soft: #FFEBEE;
+            --orange: #EF6C00;
+            --orange-soft: #FFF3E0;
+            --gray-900: #212121;
+            --gray-700: #616161;
+            --gray-500: #9E9E9E;
+            --gray-300: #E0E0E0;
+            --gray-100: #F5F5F5;
+            --white: #FFFFFF;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            --shadow-xl: 0 12px 40px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--gray-300);
+            padding: 0 2rem; height: 70px;
+            display: flex; align-items: center; justify-content: space-between;
+            transition: var(--transition);
+        }
+        .navbar.scrolled { box-shadow: var(--shadow-md); }
+        .navbar-brand {
+            display: flex; align-items: center; gap: 12px;
+            text-decoration: none; color: var(--green-dark);
+            font-weight: 700; font-size: 1.1rem;
+        }
+        .navbar-brand .icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--green-main), var(--blue-main));
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.2rem;
+        }
+        .nav-links { display: flex; gap: 0.5rem; list-style: none; }
+        .nav-links a {
+            text-decoration: none; color: var(--gray-700);
+            font-size: 0.85rem; font-weight: 500;
+            padding: 0.5rem 1rem; border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--green-soft); color: var(--green-dark);
+        }
+        .nav-toggle {
+            display: none; background: none; border: none;
+            font-size: 1.5rem; color: var(--gray-700); cursor: pointer;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--blue-dark) 100%);
+            position: relative; overflow: hidden; padding: 2rem;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: 80%; height: 200%;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.05) 0%, transparent 70%);
+            animation: heroGlow 8s ease-in-out infinite alternate;
+        }
+        @keyframes heroGlow {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-30px) rotate(3deg); }
+        }
+        .hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        .hero-content { text-align: center; color: white; z-index: 2; max-width: 800px; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.5rem 1.2rem; border-radius: 50px;
+            font-size: 0.85rem; font-weight: 500; margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        .hero-badge .dot {
+            width: 8px; height: 8px; background: var(--gold);
+            border-radius: 50%; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.15; margin-bottom: 0.5rem; }
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--gold), #FFD54F);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero-subtitle { font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400; opacity: 0.9; margin-bottom: 2rem; }
+        .hero-school { font-size: 0.95rem; opacity: 0.7; margin-bottom: 2.5rem; }
+        .hero-stats { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+        .hero-stat { text-align: center; }
+        .hero-stat .number { font-size: 2rem; font-weight: 800; display: block; }
+        .hero-stat .label { font-size: 0.8rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+        .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 0.8rem 1.8rem; border-radius: 50px;
+            font-weight: 600; font-size: 0.95rem; text-decoration: none;
+            transition: var(--transition); cursor: pointer; border: none; font-family: inherit;
+        }
+        .btn-primary {
+            background: var(--gold); color: var(--gray-900);
+            box-shadow: 0 4px 15px rgba(249, 168, 37, 0.4);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(249, 168, 37, 0.5); }
+        .btn-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.3); }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); }
+
+        /* SECTIONS COMMON */
+        .section { padding: 5rem 2rem; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-tag {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 0.75rem;
+            padding: 0.4rem 1rem; border-radius: 50px;
+        }
+        .tag-green { background: var(--green-soft); color: var(--green-dark); }
+        .tag-blue { background: var(--blue-soft); color: var(--blue-dark); }
+        .tag-gold { background: var(--gold-light); color: var(--orange); }
+        .tag-red { background: var(--red-soft); color: var(--red-alert); }
+        .section-header h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 800; color: var(--gray-900); margin-bottom: 0.5rem; }
+        .section-header p { font-size: 1.05rem; color: var(--gray-700); max-width: 650px; margin: 0 auto; }
+
+        /* O QUE É */
+        .what-is { background: var(--white); }
+        .flow-diagram { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; margin: 2rem 0; }
+        .flow-step { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1.5rem 1rem; text-align: center; min-width: 140px; }
+        .flow-step .flow-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; box-shadow: var(--shadow-md); }
+        .flow-step .flow-label { font-weight: 600; font-size: 0.9rem; color: var(--gray-900); }
+        .flow-step .flow-desc { font-size: 0.78rem; color: var(--gray-500); max-width: 130px; }
+        .flow-arrow { font-size: 1.5rem; color: var(--gray-300); padding: 0 0.25rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+        .feature-card { background: var(--gray-100); border-radius: var(--radius-md); padding: 1.5rem; border: 1px solid var(--gray-300); transition: var(--transition); }
+        .feature-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .feature-card .feat-icon { width: 48px; height: 48px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: white; margin-bottom: 1rem; }
+        .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .feature-card p { font-size: 0.85rem; color: var(--gray-700); }
+
+        /* FORMULÁRIOS */
+        .forms-section { background: var(--gray-100); }
+        .forms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+        .form-card { background: var(--white); border-radius: var(--radius-lg); padding: 2rem; border: 1px solid var(--gray-300); text-align: center; transition: var(--transition); position: relative; overflow: hidden; }
+        .form-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+        .form-card:nth-child(1)::before { background: var(--green-main); }
+        .form-card:nth-child(2)::before { background: var(--blue-main); }
+        .form-card:nth-child(3)::before { background: var(--gold); }
+        .form-card:nth-child(4)::before { background: #7B1FA2; }
+        .form-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .form-card .form-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; margin: 0 auto 1rem; }
+        .form-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .form-card .form-actor { font-size: 0.8rem; color: var(--gray-500); margin-bottom: 0.75rem; }
+        .form-card p { font-size: 0.85rem; color: var(--gray-700); margin-bottom: 1.2rem; }
+        .btn-form { display: inline-flex; align-items: center; gap: 6px; padding: 0.6rem 1.4rem; border-radius: 50px; font-weight: 600; font-size: 0.85rem; text-decoration: none; color: white; transition: var(--transition); }
+        .btn-form:hover { transform: scale(1.05); box-shadow: var(--shadow-md); }
+        .form-card:nth-child(1) .form-icon, .form-card:nth-child(1) .btn-form { background: var(--green-main); }
+        .form-card:nth-child(2) .form-icon, .form-card:nth-child(2) .btn-form { background: var(--blue-main); }
+        .form-card:nth-child(3) .form-icon, .form-card:nth-child(3) .btn-form { background: var(--orange); }
+        .form-card:nth-child(4) .form-icon, .form-card:nth-child(4) .btn-form { background: #7B1FA2; }
+
+        /* DASHBOARDS PEDAGÓGICO */
+        .dash-pedagogico { background: var(--white); }
+        .dash-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .dash-tab { padding: 0.6rem 1.5rem; border-radius: 50px; border: 2px solid var(--gray-300); background: var(--white); color: var(--gray-700); font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition); font-family: inherit; }
+        .dash-tab.active, .dash-tab:hover { border-color: var(--green-main); background: var(--green-soft); color: var(--green-dark); }
+        .dash-tab[data-tab="autoavaliacao"].active, .dash-tab[data-tab="autoavaliacao"]:hover { border-color: var(--blue-main); background: var(--blue-soft); color: var(--blue-dark); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .screenshot-gallery { display: grid; gap: 1.5rem; }
+        .screenshot-gallery.cols-1 { grid-template-columns: 1fr; max-width: 900px; margin: 0 auto; }
+        .screenshot-gallery.cols-2 { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+        .screenshot-item { background: var(--gray-100); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--gray-300); transition: var(--transition); }
+        .screenshot-item:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+        .screenshot-item img { width: 100%; height: auto; display: block; cursor: zoom-in; }
+        .screenshot-caption { padding: 1rem 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .screenshot-caption .cap-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; flex-shrink: 0; }
+        .cap-green { background: var(--green-main); }
+        .cap-blue { background: var(--blue-main); }
+        .cap-gold { background: var(--orange); }
+        .cap-red { background: var(--red-alert); }
+        .screenshot-caption .cap-text h4 { font-size: 0.9rem; font-weight: 600; }
+        .screenshot-caption .cap-text p { font-size: 0.78rem; color: var(--gray-500); }
+
+        /* DASHBOARD INVENTÁRIO */
+        .dash-inventario { background: var(--gray-100); }
+        .inv-subsection { margin-bottom: 3rem; }
+        .inv-subsection-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--gray-300); }
+        .inv-subsection-header .inv-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: white; }
+        .inv-subsection-header h3 { font-size: 1.2rem; font-weight: 700; }
+        .inv-subsection-header p { font-size: 0.85rem; color: var(--gray-500); }
+        .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .kpi-card { background: var(--white); border-radius: var(--radius-md); padding: 1.2rem 1.5rem; border-left: 4px solid; box-shadow: var(--shadow-sm); }
+        .kpi-card .kpi-value { font-size: 1.8rem; font-weight: 800; }
+        .kpi-card .kpi-label { font-size: 0.8rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; }
+        .kpi-green { border-color: var(--green-main); }
+        .kpi-green .kpi-value { color: var(--green-dark); }
+        .kpi-blue { border-color: var(--blue-main); }
+        .kpi-blue .kpi-value { color: var(--blue-dark); }
+        .kpi-gold { border-color: var(--gold); }
+        .kpi-gold .kpi-value { color: var(--orange); }
+        .kpi-red { border-color: var(--red-alert); }
+        .kpi-red .kpi-value { color: var(--red-alert); }
+
+        /* ESTRUTURA */
+        .structure-section { background: var(--white); }
+        .actor-flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .actor-card { background: var(--gray-100); border-radius: var(--radius-md); padding: 1.5rem; border: 1px solid var(--gray-300); }
+        .actor-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .actor-card ul { list-style: none; padding: 0; }
+        .actor-card ul li { font-size: 0.85rem; padding: 0.4rem 0; display: flex; align-items: center; gap: 0.5rem; color: var(--gray-700); }
+        .actor-card ul li i { color: var(--green-main); font-size: 0.75rem; }
+
+        /* PRÓXIMOS PASSOS + FAQ */
+        .next-steps { background: var(--gray-100); }
+        .timeline { position: relative; max-width: 700px; margin: 2rem auto; }
+        .timeline::before { content: ''; position: absolute; left: 24px; top: 0; bottom: 0; width: 3px; background: var(--gray-300); }
+        .timeline-item { position: relative; padding-left: 60px; margin-bottom: 2rem; }
+        .timeline-item .tl-dot { position: absolute; left: 12px; top: 4px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: white; }
+        .timeline-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+        .timeline-item p { font-size: 0.85rem; color: var(--gray-700); }
+        .timeline-item .tl-when { font-size: 0.75rem; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem; }
+        .faq-list { max-width: 700px; margin: 2rem auto 0; }
+        .faq-item { background: var(--white); border-radius: var(--radius-md); margin-bottom: 0.75rem; border: 1px solid var(--gray-300); overflow: hidden; }
+        .faq-question { width: 100%; padding: 1.2rem 1.5rem; background: none; border: none; text-align: left; font-size: 0.95rem; font-weight: 600; color: var(--gray-900); cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-family: inherit; transition: var(--transition); }
+        .faq-question:hover { background: var(--gray-100); }
+        .faq-question .faq-chevron { transition: var(--transition); font-size: 0.85rem; color: var(--gray-500); }
+        .faq-item.open .faq-chevron { transform: rotate(180deg); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .faq-item.open .faq-answer { max-height: 500px; }
+        .faq-answer-inner { padding: 0 1.5rem 1.2rem; font-size: 0.9rem; color: var(--gray-700); line-height: 1.7; }
+
+        /* FOOTER */
+        .footer { background: var(--gray-900); color: rgba(255,255,255,0.6); text-align: center; padding: 2rem; font-size: 0.85rem; }
+        .footer strong { color: white; }
+
+        /* LIGHTBOX */
+        .lightbox-overlay { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
+        .lightbox-overlay.active { display: flex; }
+        .lightbox-overlay img { max-width: 95%; max-height: 90vh; border-radius: var(--radius-sm); box-shadow: var(--shadow-xl); }
+        .lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: white; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 70px; left: 0; right: 0; background: var(--white); flex-direction: column; padding: 1rem; box-shadow: var(--shadow-lg); border-bottom: 1px solid var(--gray-300); }
+            .nav-links.open { display: flex; }
+            .nav-toggle { display: block; }
+            .hero-stats { gap: 1rem; }
+            .hero-stat .number { font-size: 1.5rem; }
+            .flow-diagram { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+            .screenshot-gallery.cols-2 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <a href="#hero" class="navbar-brand">
+            <div class="icon"><i class="fas fa-cogs"></i></div>
+            <span>Lab Maker</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#o-que-e">O que é</a></li>
+            <li><a href="#formularios">Formulários</a></li>
+            <li><a href="#dash-pedagogico">Pedagógico</a></li>
+            <li><a href="#dash-inventario">Inventário</a></li>
+            <li><a href="#estrutura">Estrutura</a></li>
+            <li><a href="#proximos-passos">Próximos Passos</a></li>
+        </ul>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                Sistema em Homologação — Fase 1
+            </div>
+            <h1>
+                <span class="highlight">Lab Maker</span><br>
+                Sistema de Gestão Integrada
+            </h1>
+            <p class="hero-subtitle">Gestão de inventário, projetos e avaliação pedagógica para a Sala Maker</p>
+            <p class="hero-school"><i class="fas fa-school"></i>&nbsp; EEB Elfrida Cristino da Silva — Itajaí/SC — Rede Estadual</p>
+            <div class="hero-stats">
+                <div class="hero-stat"><span class="number">373</span><span class="label">Itens cadastrados</span></div>
+                <div class="hero-stat"><span class="number">4</span><span class="label">Formulários</span></div>
+                <div class="hero-stat"><span class="number">5</span><span class="label">Projetos ativos</span></div>
+                <div class="hero-stat"><span class="number">34</span><span class="label">Scripts .gs</span></div>
+            </div>
+            <div class="hero-cta">
+                <a href="#formularios" class="btn btn-primary"><i class="fas fa-play-circle"></i> Ver Formulários</a>
+                <a href="#dash-inventario" class="btn btn-outline"><i class="fas fa-chart-pie"></i> Ver Dashboards</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 1: O QUE É -->
+    <section class="section what-is" id="o-que-e">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag tag-green"><i class="fas fa-info-circle"></i> Visão Geral</div>
+                <h2>O que é o Sistema Lab Maker?</h2>
+                <p>Um ecossistema integrado no Google Workspace que conecta formulários, planilhas automatizadas e dashboards para gestão completa da Sala Maker.</p>
+            </div>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-icon" style="background: var(--green-main);"><i class="fas fa-user-tie"></i></div>
+                    <span class="flow-label">Professor</span>
+                    <span class="flow-desc">Agenda aula e avalia por rubrica</span>
+                </div>
+                <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <div class="flow-icon" style="background: var(--blue-main);"><i class="fab fa-google"></i></div>
+                    <span class="flow-label">Google Forms</span>
+                    <span class="flow-desc">Coleta padronizada de dados</span>
+                </div>
+                <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <div class="flow-icon" style="background: var(--orange);"><i class="fas fa-cogs"></i></div>
+                    <span class="flow-label">Scripts .gs</span>
+                    <span class="flow-desc">34 automações processam tudo</span>
+                </div>
+                <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <div class="flow-icon" style="background: var(--gold);"><i class="fas fa-table"></i></div>
+                    <span class="flow-label">Planilha</span>
+                    <span class="flow-desc">Dados organizados em 15+ abas</span>
+                </div>
+                <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="flow-step">
+                    <div class="flow-icon" style="background: linear-gradient(135deg, var(--green-main), var(--blue-main));"><i class="fas fa-chart-bar"></i></div>
+                    <span class="flow-label">Dashboards</span>
+                    <span class="flow-desc">Visão em tempo real</span>
+                </div>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feat-icon" style="background: var(--green-main);"><i class="fas fa-boxes-stacked"></i></div>
+                    <h3>Inventário Completo</h3>
+                    <p>373 itens catalogados com estado, risco, manutenção, categoria e nível de recurso.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feat-icon" style="background: var(--blue-main);"><i class="fas fa-clipboard-check"></i></div>
+                    <h3>Avaliação por Rubrica</h3>
+                    <p>Professor avalia por critérios objetivos. Sistema gera desempenho geral automático.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feat-icon" style="background: #7B1FA2;"><i class="fas fa-user-check"></i></div>
+                    <h3>Autoavaliação do Aluno</h3>
+                    <p>Protagonismo: o estudante reflete sobre seu desempenho e contribuição.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feat-icon" style="background: var(--orange);"><i class="fas fa-triangle-exclamation"></i></div>
+                    <h3>Triangulação</h3>
+                    <p>Compara rubrica do professor × autoavaliação do aluno. Identifica divergências automaticamente.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feat-icon" style="background: var(--red-alert);"><i class="fas fa-handshake-angle"></i></div>
+                    <h3>Empréstimos</h3>
+                    <p>Controle de materiais emprestados, prazos e alertas de atraso automáticos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feat-icon" style="background: var(--gold);"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Gestão de Projetos</h3>
+                    <p>5 projetos ativos com status, turmas, área de conhecimento e cronograma.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 2: FORMULÁRIOS -->
+    <section class="section forms-section" id="formularios">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag tag-blue"><i class="fab fa-google"></i> Formulários</div>
+                <h2>Entrada de Dados — Google Forms</h2>
+                <p>Clique para abrir os formulários reais. Na sala Maker, professores e alunos preenchem pelo celular ou computador.</p>
+            </div>
+            <div class="forms-grid">
+                <div class="form-card">
+                    <div class="form-icon"><i class="fas fa-calendar-check"></i></div>
+                    <h3>Agendamento de Aula</h3>
+                    <div class="form-actor"><i class="fas fa-user-tie"></i> Preenchido pelo Professor</div>
+                    <p>O professor reserva a Sala Maker informando turma, data, projeto e materiais necessários.</p>
+                    <a href="https://docs.google.com/forms/d/1CaMk6v9-dtASZVvNP584tMvH4BOnGv6ychngxJJKuaY/viewform" target="_blank" class="btn-form"><i class="fas fa-external-link-alt"></i> Abrir Formulário</a>
+                </div>
+                <div class="form-card">
+                    <div class="form-icon"><i class="fas fa-book-open"></i></div>
+                    <h3>Diário de Bordo</h3>
+                    <div class="form-actor"><i class="fas fa-user-graduate"></i> Preenchido pelo Aluno</div>
+                    <p>O estudante registra o que fez, aprendeu, dificuldades e próximos passos de cada aula.</p>
+                    <a href="https://docs.google.com/forms/d/1GZ3xx95w1CsccxMryswrF3ck3vLyobcpol5IOrN4dQE/viewform" target="_blank" class="btn-form"><i class="fas fa-external-link-alt"></i> Abrir Formulário</a>
+                </div>
+                <div class="form-card">
+                    <div class="form-icon"><i class="fas fa-star-half-alt"></i></div>
+                    <h3>Avaliação por Rubrica</h3>
+                    <div class="form-actor"><i class="fas fa-user-tie"></i> Preenchido pelo Professor</div>
+                    <p>Avaliação objetiva por critérios: engajamento, colaboração, qualidade técnica e apresentação.</p>
+                    <a href="https://docs.google.com/forms/d/1aHwqmBnXZDuJwz8pouXSkmZTvftBa6SygNF-V55nJdI/viewform" target="_blank" class="btn-form"><i class="fas fa-external-link-alt"></i> Abrir Formulário</a>
+                </div>
+                <div class="form-card">
+                    <div class="form-icon"><i class="fas fa-user-check"></i></div>
+                    <h3>Autoavaliação</h3>
+                    <div class="form-actor"><i class="fas fa-user-graduate"></i> Preenchido pelo Aluno</div>
+                    <p>O aluno avalia a si mesmo nos mesmos critérios da rubrica, promovendo reflexão e protagonismo.</p>
+                    <a href="https://docs.google.com/forms/d/1V6X0RS1CoXzo_L6R6W1mYbQFXdZAll6xmlHCRTz2rb8/viewform" target="_blank" class="btn-form"><i class="fas fa-external-link-alt"></i> Abrir Formulário</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 3: DASHBOARD PEDAGÓGICO -->
+    <section class="section dash-pedagogico" id="dash-pedagogico">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag tag-green"><i class="fas fa-graduation-cap"></i> Avaliação</div>
+                <h2>Dashboards Pedagógicos</h2>
+                <p>Visão consolidada da avaliação por rubrica e autoavaliação, com triangulação automática entre professor e aluno.</p>
+            </div>
+            <div class="dash-tabs">
+                <button class="dash-tab active" data-tab="rubrica" onclick="switchTab('rubrica')"><i class="fas fa-star-half-alt"></i>&nbsp; Rubrica (Professor)</button>
+                <button class="dash-tab" data-tab="autoavaliacao" onclick="switchTab('autoavaliacao')"><i class="fas fa-user-check"></i>&nbsp; Autoavaliação (Aluno)</button>
+            </div>
+
+            <!-- Tab: Rubrica -->
+            <div class="tab-content active" id="tab-rubrica">
+                <div class="screenshot-gallery cols-1">
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1FfQdDZ1uU3jkKJDrIl6vONwdgJP_BcFp" alt="Rubrica - Resumo Geral e Desempenho" onclick="openLightbox(this.src)" loading="lazy">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1LLXdseOsv-Tdi4xljZScohUhEEEyCiH_" alt="Rubrica - Critérios Detalhados" onclick="openLightbox(this.src)" loading="lazy">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/10KxlSnEoclywno1OBzvHmgksKfX7z8p4" alt="Rubrica - Triangulação" onclick="openLightbox(this.src)" loading="lazy">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Autoavaliação -->
+            <div class="tab-content" id="tab-autoavaliacao">
+                <div class="screenshot-gallery cols-1">
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1MMK1R8_Ct6safgY2W3hj7gm5o-X-JrW_" alt="Autoavaliação - Resumo Geral" onclick="openLightbox(this.src)" loading="lazy">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1y_7zvrOtxZoWHrAU1ovgFIbYs0QJh3xT" alt="Autoavaliação - Distribuição por Nível" onclick="openLightbox(this.src)" loading="lazy">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1jixrCCU3UFV5_H-P57lxn6QaxaHowgBJ" alt="Autoavaliação - Comparativo por Turma" onclick="openLightbox(this.src)" loading="lazy">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1Kq1p8rhTRMIsiGeWHdu4VKzW3AMigz9-" alt="Autoavaliação - Evolução Temporal" onclick="openLightbox(this.src)" loading="lazy">
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1WHI1e6WXlHuYkj5IY-fH6tec18IO1qpT" alt="Autoavaliação - Triangulação e Alertas" onclick="openLightbox(this.src)" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 4: DASHBOARD INVENTÁRIO -->
+    <section class="section dash-inventario" id="dash-inventario">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag tag-gold"><i class="fas fa-boxes-stacked"></i> Gestão</div>
+                <h2>Dashboard do Inventário</h2>
+                <p>Controle completo de materiais, equipamentos, segurança, empréstimos e projetos da Sala Maker.</p>
+            </div>
+
+            <div class="kpi-row">
+                <div class="kpi-card kpi-green"><span class="kpi-value">373</span><span class="kpi-label">Itens cadastrados</span></div>
+                <div class="kpi-card kpi-blue"><span class="kpi-value">56,3%</span><span class="kpi-label">Inventário realizado</span></div>
+                <div class="kpi-card kpi-red"><span class="kpi-value">2.990</span><span class="kpi-label">Déficit total</span></div>
+                <div class="kpi-card kpi-gold"><span class="kpi-value">40,1%</span><span class="kpi-label">Estoque urgente</span></div>
+            </div>
+
+            <!-- Resumo Geral + Status Estoque -->
+            <div class="inv-subsection">
+                <div class="inv-subsection-header">
+                    <div class="inv-icon" style="background: var(--green-main);"><i class="fas fa-chart-pie"></i></div>
+                    <div>
+                        <h3>Resumo Geral &amp; Status do Estoque</h3>
+                        <p>Visão consolidada + distribuição Adequado / Baixo / Urgente</p>
+                    </div>
+                </div>
+                <div class="screenshot-gallery cols-1">
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/13suaF1Zin06iS8Y3dAg2MXYQgA-nBoFq" alt="Inventário - Resumo Geral e Status Estoque" onclick="openLightbox(this.src)" loading="lazy">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estado + Manutenção -->
+            <div class="inv-subsection">
+                <div class="inv-subsection-header">
+                    <div class="inv-icon" style="background: var(--blue-main);"><i class="fas fa-wrench"></i></div>
+                    <div>
+                        <h3>Estado dos Itens &amp; Manutenção</h3>
+                        <p>Condição física + ações de manutenção necessárias</p>
+                    </div>
+                </div>
+                <div class="screenshot-gallery cols-1">
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1YsiJ57p9kHBIqTO5wZF6m_8TCyW8wxfg" alt="Inventário - Estado dos Itens e Manutenção" onclick="openLightbox(this.src)" loading="lazy">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risco + Uso Pedagógico -->
+            <div class="inv-subsection">
+                <div class="inv-subsection-header">
+                    <div class="inv-icon" style="background: var(--orange);"><i class="fas fa-shield-halved"></i></div>
+                    <div>
+                        <h3>Risco / Segurança &amp; Uso Pedagógico</h3>
+                        <p>Classificação de risco e vínculo dos itens com áreas pedagógicas</p>
+                    </div>
+                </div>
+                <div class="screenshot-gallery cols-2">
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1TLhh-QQnBuW623fNXn6lPSi4rp0Iznnx" alt="Inventário - Risco e Segurança" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="screenshot-caption">
+                            <span class="cap-num cap-gold">3</span>
+                            <div class="cap-text">
+                                <h4>Risco / Segurança</h4>
+                                <p>Baixo 63% | Médio 30,6% | Alto 6,4% | Crítico 0%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1JCuD2IvLZF3d8VbkExWNnYMkIDzbpF7A" alt="Inventário - Uso Pedagógico" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="screenshot-caption">
+                            <span class="cap-num cap-gold">4</span>
+                            <div class="cap-text">
+                                <h4>Uso Pedagógico</h4>
+                                <p>Fabricação 127 | Artes 111 | Eletrônica 104</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categorias + Nível de Recurso -->
+            <div class="inv-subsection">
+                <div class="inv-subsection-header">
+                    <div class="inv-icon" style="background: var(--red-alert);"><i class="fas fa-tags"></i></div>
+                    <div>
+                        <h3>Categorias, Déficit &amp; Nível de Recurso</h3>
+                        <p>14 categorias com quantidade ideal vs. atual + segmentação por custo</p>
+                    </div>
+                </div>
+                <div class="screenshot-gallery cols-1">
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1_7qeCEBjnBEM7Y2jFy23jEauDi9Sz3CR" alt="Inventário - Categorias e Déficit" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="screenshot-caption">
+                            <span class="cap-num cap-red">5</span>
+                            <div class="cap-text">
+                                <h4>Categorias &amp; Déficit por Categoria</h4>
+                                <p>Mat. Eletrônica: maior déficit (1.431) | 14 categorias mapeadas</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1w7wsEPJmgOv4QMQQqsqUiYmRqs0PUDjy" alt="Inventário - Nível de Recurso e TOP 10" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="screenshot-caption">
+                            <span class="cap-num cap-red">6</span>
+                            <div class="cap-text">
+                                <h4>Nível de Recurso + TOP 10 Compra Prioritária</h4>
+                                <p>Baixo custo: 234 itens, déficit 2.712 | #1 Diodo 1N4148 (déficit 250)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertas + Empréstimos -->
+            <div class="inv-subsection">
+                <div class="inv-subsection-header">
+                    <div class="inv-icon" style="background: #E65100;"><i class="fas fa-bell"></i></div>
+                    <div>
+                        <h3>Alertas &amp; Empréstimos</h3>
+                        <p>Itens que precisam de atenção + controle de materiais emprestados</p>
+                    </div>
+                </div>
+                <div class="screenshot-gallery cols-2">
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1hk-Fp9JCHantp2rxZm1ol78jDOOxfPA3" alt="Inventário - Painel de Alertas" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="screenshot-caption">
+                            <span class="cap-num cap-gold">7</span>
+                            <div class="cap-text">
+                                <h4>Painel de Alertas</h4>
+                                <p>145 estoque urgente | 24 risco alto | 10 manutenção</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1Ks1vHcYt26EC5Lo3X9PhCeB3LvuiUif9" alt="Inventário - Empréstimos e Atrasados" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="screenshot-caption">
+                            <span class="cap-num cap-red">8</span>
+                            <div class="cap-text">
+                                <h4>Empréstimos + Atrasados</h4>
+                                <p>5 empréstimos | 3 atrasados (até 7 dias) | Responsáveis identificados</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projetos -->
+            <div class="inv-subsection">
+                <div class="inv-subsection-header">
+                    <div class="inv-icon" style="background: #6A1B9A;"><i class="fas fa-rocket"></i></div>
+                    <div>
+                        <h3>Projetos Ativos</h3>
+                        <p>Gestão de projetos interdisciplinares com status, turmas e cronograma</p>
+                    </div>
+                </div>
+                <div class="screenshot-gallery cols-1">
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1v3LldLpFbse2f2zLH2KVi_9_ee4G4Rzs" alt="Projetos - Status e Áreas" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="screenshot-caption">
+                            <span class="cap-num" style="background:#6A1B9A;">9</span>
+                            <div class="cap-text">
+                                <h4>Projetos por Status &amp; Área</h4>
+                                <p>5 ativos | 2 Ideia, 3 Planejado | Matemática, Física, Arte, Ciências...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="https://lh3.googleusercontent.com/d/1--5UU5Ov2b6Kp-FIQUVIPXK_w4XMlB4J" alt="Projetos - Visão Rápida PRJ-001 a PRJ-005" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="screenshot-caption">
+                            <span class="cap-num" style="background:#6A1B9A;">10</span>
+                            <div class="cap-text">
+                                <h4>Visão Rápida dos Projetos</h4>
+                                <p>Robô Seguidor de Linha | Luminária Sustentável | Horta Inteligente...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 5: ESTRUTURA -->
+    <section class="section structure-section" id="estrutura">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag tag-green"><i class="fas fa-sitemap"></i> Estrutura</div>
+                <h2>Quem faz o quê?</h2>
+                <p>Cada ator tem seu papel claro. O sistema organiza, automatiza e apresenta.</p>
+            </div>
+            <div class="actor-flow">
+                <div class="actor-card">
+                    <h3><i class="fas fa-user-tie" style="color:var(--green-main)"></i> Professor</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Agenda aulas na Sala Maker</li>
+                        <li><i class="fas fa-check"></i> Avalia alunos por rubrica</li>
+                        <li><i class="fas fa-check"></i> Consulta dashboards pedagógicos</li>
+                        <li><i class="fas fa-check"></i> Acompanha triangulação</li>
+                    </ul>
+                </div>
+                <div class="actor-card">
+                    <h3><i class="fas fa-user-graduate" style="color:var(--blue-main)"></i> Aluno</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Preenche Diário de Bordo</li>
+                        <li><i class="fas fa-check"></i> Faz autoavaliação</li>
+                        <li><i class="fas fa-check"></i> Protagonismo e reflexão</li>
+                        <li><i class="fas fa-check"></i> Documenta processo criativo</li>
+                    </ul>
+                </div>
+                <div class="actor-card">
+                    <h3><i class="fas fa-user-shield" style="color:var(--orange)"></i> Professor Orientador Maker</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Gerencia inventário completo</li>
+                        <li><i class="fas fa-check"></i> Controla empréstimos</li>
+                        <li><i class="fas fa-check"></i> Monitora alertas e manutenção</li>
+                        <li><i class="fas fa-check"></i> Planeja projetos interdisciplinares</li>
+                    </ul>
+                </div>
+                <div class="actor-card">
+                    <h3><i class="fas fa-building-columns" style="color:#6A1B9A"></i> Direção / Gestão</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Visão geral via dashboards</li>
+                        <li><i class="fas fa-check"></i> Dados para tomada de decisão</li>
+                        <li><i class="fas fa-check"></i> Justificativa para compras (TOP 10 Déficit)</li>
+                        <li><i class="fas fa-check"></i> Acompanhamento de projetos pedagógicos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 6: PRÓXIMOS PASSOS + FAQ -->
+    <section class="section next-steps" id="proximos-passos">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag tag-gold"><i class="fas fa-road"></i> Roadmap</div>
+                <h2>Próximos Passos</h2>
+                <p>O sistema está em homologação. Veja o caminho para a operação com dados reais.</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="tl-dot" style="background: var(--green-main);">✓</div>
+                    <div class="tl-when">Concluído</div>
+                    <h4>Fase 0 — Estruturação</h4>
+                    <p>Inventário de 373 itens, 34 scripts .gs, 4 formulários, dashboards de inventário, rubrica e autoavaliação. Sistema construído e funcional.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="tl-dot" style="background: var(--gold);"><i class="fas fa-play" style="font-size:0.6rem"></i></div>
+                    <div class="tl-when">Agora — Março 2026</div>
+                    <h4>Fase 1 — Homologação</h4>
+                    <p>Validação com dados fictícios. Apresentação à direção. Ajustes finais. Liberação de acesso aos professores.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="tl-dot" style="background: var(--gray-500);"><i class="fas fa-arrow-right" style="font-size:0.6rem"></i></div>
+                    <div class="tl-when">Próximo — Abril 2026</div>
+                    <h4>Fase 2 — Operação Real</h4>
+                    <p>Limpeza das abas de teste. Primeiro agendamento real. Professores usando formulários. Dados reais alimentando dashboards.</p>
+                </div>
+            </div>
+
+            <div class="section-header" style="margin-top:3rem;">
+                <h2 style="font-size:1.5rem;">Perguntas Frequentes</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Os dados que estou vendo são reais?
+                        <i class="fas fa-chevron-down faq-chevron"></i>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner"><strong>Não.</strong> Todos os dados atuais (alunos, notas, projetos) são <strong>fictícios</strong>, usados para testar o sistema. Quando aprovado, todas as abas serão limpas e começaremos com respostas reais dos formulários.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Os professores precisam aprender a usar a planilha?
+                        <i class="fas fa-chevron-down faq-chevron"></i>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner"><strong>Não.</strong> Os professores interagem apenas com os <strong>formulários do Google</strong> (celular ou computador). Tudo é processado automaticamente pelos scripts. Os dashboards são só para consulta visual.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Tem algum custo?
+                        <i class="fas fa-chevron-down faq-chevron"></i>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner"><strong>Zero.</strong> Todo o sistema usa ferramentas gratuitas do Google Workspace (Planilhas, Formulários, Apps Script). Não há licenças, servidores ou assinaturas.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        O que acontece se eu preencher o formulário agora?
+                        <i class="fas fa-chevron-down faq-chevron"></i>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Os dados vão para a planilha de teste. Pode explorar à vontade! Na transição para dados reais, tudo será limpo. Os formulários estão configurados para aceitar respostas de teste durante a homologação.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Quais são as próximas etapas para ativar?
+                        <i class="fas fa-chevron-down faq-chevron"></i>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner"><strong>3 passos:</strong> (1) Aprovação da direção ✅ (esta apresentação), (2) Comunicação formal aos professores pela direção, (3) Limpeza das abas e início com dados reais.</div></div>
+                </div>
+                <!-- NOVA PERGUNTA: COMO ACESSAR O LAB MAKER -->
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Como professor, aluno ou direção acessa o Lab Maker para preencher formulários e ver resultados?
+                        <i class="fas fa-chevron-down faq-chevron"></i>
+                    </button>
+                    <div class="faq-answer"><div class="faq-answer-inner">
+                        <strong>É simples e depende do seu papel:</strong><br><br>
+                        👨‍🏫 <strong>Professor:</strong> Acessa os formulários de <em>Agendamento de Aula</em> e <em>Avaliação por Rubrica</em> pelos links desta página ou por atalhos compartilhados via grupo de WhatsApp / e-mail institucional. Para consultar os dashboards pedagógicos, basta abrir o link da planilha Google (compartilhado com permissão de visualização).<br><br>
+                        🎓 <strong>Aluno:</strong> Preenche o <em>Diário de Bordo</em> e a <em>Autoavaliação</em> pelo celular ou computador da sala, usando os links dos formulários. Não precisa instalar nada — é tudo pelo navegador.<br><br>
+                        🏫 <strong>Direção / Gestão:</strong> Acessa os dashboards de inventário e pedagógico pela planilha Google (link compartilhado com permissão de visualização). Todos os dados consolidados — estoque, projetos, avaliações e alertas — ficam disponíveis em tempo real.<br><br>
+                        <strong>Resumo:</strong> Ninguém precisa instalar aplicativo ou aprender a mexer na planilha. Formulários pelo celular → dados processados automaticamente → dashboards prontos para consulta. 📱➡️⚙️➡️📊
+                    </div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>
+            <strong>Lab Maker</strong> — EEB Elfrida Cristino da Silva — Itajaí/SC<br>
+            Sistema de Gestão Integrada da Sala Maker | Rede Estadual de Santa Catarina<br>
+            <span style="opacity:0.5; font-size:0.75rem;">Versão de demonstração — Dados fictícios — Março 2026</span>
+        </p>
+    </footer>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close"><i class="fas fa-times"></i></button>
+        <img src="" alt="Zoom" id="lightboxImg">
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        document.getElementById('navToggle').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('open');
+            });
+        });
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.dash-tab[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!wasOpen) item.classList.add('open');
+        }
+
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        const sections = document.querySelectorAll('section[id]');
+        const navLinksAll = document.querySelectorAll('.nav-links a');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                if (window.scrollY >= section.offsetTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinksAll.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+            });
+        });
+    </script>
+
+</body>
+</html>
+
