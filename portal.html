@@ -156,13 +156,13 @@
         /* CARDS SECTION */
         .portal-cards-section {
             padding: 3rem 2rem 4rem;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .portal-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 2rem;
         }
 
@@ -195,6 +195,7 @@
         .card-professor .portal-card-header::before { background: linear-gradient(90deg, var(--green-main), var(--green-light)); }
         .card-aluno .portal-card-header::before { background: linear-gradient(90deg, var(--blue-main), var(--blue-light)); }
         .card-dashboards .portal-card-header::before { background: linear-gradient(90deg, var(--orange), var(--gold)); }
+        .card-catalogo .portal-card-header::before { background: linear-gradient(90deg, var(--purple), #AB47BC); }
 
         .portal-card-icon {
             width: 72px; height: 72px;
@@ -207,6 +208,7 @@
         .card-professor .portal-card-icon { background: linear-gradient(135deg, var(--green-main), var(--green-dark)); }
         .card-aluno .portal-card-icon { background: linear-gradient(135deg, var(--blue-main), var(--blue-dark)); }
         .card-dashboards .portal-card-icon { background: linear-gradient(135deg, var(--orange), #E65100); }
+        .card-catalogo .portal-card-icon { background: linear-gradient(135deg, var(--purple), #4A148C); }
 
         .portal-card-header h2 {
             font-size: 1.2rem; font-weight: 700; margin-bottom: 0.3rem;
@@ -244,6 +246,9 @@
         .card-dashboards .portal-link:hover {
             border-color: var(--orange);
         }
+        .card-catalogo .portal-link:hover {
+            border-color: var(--purple);
+        }
 
         .portal-link-icon {
             width: 40px; height: 40px;
@@ -273,6 +278,9 @@
         .card-dashboards .portal-link:hover .link-arrow {
             color: var(--orange);
         }
+        .card-catalogo .portal-link:hover .link-arrow {
+            color: var(--purple);
+        }
 
         /* CARD COLORS - LINK ICONS */
         .icon-green { background: var(--green-main); }
@@ -284,7 +292,7 @@
 
         /* INFO BAR */
         .portal-info {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto 2rem;
             padding: 0 2rem;
         }
@@ -314,14 +322,12 @@
         .footer a:hover { color: white; text-decoration: underline; }
 
         /* RESPONSIVE */
-        @media (max-width: 968px) {
+        @media (max-width: 768px) {
             .portal-grid {
                 grid-template-columns: 1fr;
                 max-width: 480px;
                 margin: 0 auto;
             }
-        }
-        @media (max-width: 768px) {
             .nav-links {
                 display: none; position: absolute; top: 70px; left: 0; right: 0;
                 background: var(--white); flex-direction: column; padding: 1rem;
@@ -364,7 +370,7 @@
                 Sistema em Homologação — Fase 1
             </div>
             <h1><span class="highlight">Portal</span> Lab Maker</h1>
-            <p>Acesso rápido a formulários e dashboards.<br>Selecione seu perfil abaixo.</p>
+            <p>Acesso rápido a formulários, dashboards e catálogo de projetos.<br>Selecione seu perfil abaixo.</p>
         </div>
     </section>
 
@@ -434,6 +440,33 @@
                 </div>
             </div>
 
+            <!-- CARD CATÁLOGO -->
+            <div class="portal-card card-catalogo">
+                <div class="portal-card-header">
+                    <div class="portal-card-icon"><i class="fas fa-book-bookmark"></i></div>
+                    <h2>Catálogo de Projetos</h2>
+                    <p>Explore projetos Maker por componente curricular</p>
+                </div>
+                <div class="portal-card-body">
+                    <a href="catalogo.html" class="portal-link">
+                        <div class="portal-link-icon icon-purple"><i class="fas fa-microscope"></i></div>
+                        <div class="portal-link-text">
+                            <h4>Projetos por Componente</h4>
+                            <p>Física, Arte, Matemática, Biologia e mais</p>
+                        </div>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                    <a href="catalogo.html#como-funciona" class="portal-link">
+                        <div class="portal-link-icon icon-purple"><i class="fas fa-circle-info"></i></div>
+                        <div class="portal-link-text">
+                            <h4>Como Funciona</h4>
+                            <p>Entenda a metodologia Maker e os níveis de recurso</p>
+                        </div>
+                        <i class="fas fa-arrow-right link-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
             <!-- CARD DASHBOARDS -->
             <div class="portal-card card-dashboards">
                 <div class="portal-card-header">
@@ -469,7 +502,7 @@
         <p>
             <strong>Lab Maker</strong> — EEB Elfrida Cristino da Silva — Itajaí/SC<br>
             <a href="index.html">← Voltar ao site principal</a><br>
-            <span style="opacity:0.5; font-size:0.75rem;">Versão de demonstração — Dados fictícios — Março 2026</span>
+            <span style="opacity:0.5; font-size:0.75rem;">Versão de demonstração — Dados fictícios — Abril 2026</span>
         </p>
     </footer>
 
