@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de Projetos — Sala Maker</title>
+  <style>
+    /* ══════════════════════════════════════
+       VARIÁVEIS E RESET
+       ══════════════════════════════════════ */
+    :root {
+      --cor-primaria: #6C3FA0;
+      --cor-primaria-hover: #5A2D8C;
+      --cor-secundaria: #F5F0FF;
+      --cor-fundo: #FAFAFA;
+      --cor-card: #FFFFFF;
+      --cor-texto: #333333;
+      --cor-texto-leve: #666666;
+      --cor-borda: #E0E0E0;
+      --cor-sucesso: #2E7D32;
+      --cor-info: #1565C0;
+      --cor-tag-bg: #EDE7F6;
+      --cor-tag-texto: #5E35B1;
+      --sombra-card: 0 2px 8px rgba(0,0,0,0.08);
+      --sombra-card-hover: 0 6px 20px rgba(0,0,0,0.12);
+      --raio: 12px;
+      --transicao: 0.3s ease;
+
+      /* cores por componente */
+      --cor-fisica: #E65100;
+      --cor-fisica-bg: #FFF3E0;
+      --cor-arte: #AD1457;
+      --cor-arte-bg: #FCE4EC;
+      --cor-matematica: #1565C0;
+      --cor-matematica-bg: #E3F2FD;
+      --cor-biologia: #2E7D32;
+      --cor-biologia-bg: #E8F5E9;
+      --cor-eddigital: #00838F;
+      --cor-eddigital-bg: #E0F7FA;
+      --cor-historia: #4E342E;
+      --cor-historia-bg: #EFEBE9;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--cor-fundo);
+      color: var(--cor-texto);
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════════════
+       HEADER
+       ══════════════════════════════════════ */
+    .header {
+      background: linear-gradient(135deg, var(--cor-primaria), #8E24AA);
+      color: white;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .header p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .header .emoji-titulo {
+      font-size: 2.2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ══════════════════════════════════════
+       FILTROS
+       ══════════════════════════════════════ */
+    .filtros-container {
+      max-width: 1100px;
+      margin: 1.5rem auto 0.5rem;
+      padding: 0 1.5rem;
+    }
+
+    .filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .filtros label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--cor-texto-leve);
+      margin-right: 0.3rem;
+    }
+
+    .filtro-btn {
+      padding: 0.4rem 1rem;
+      border: 2px solid var(--cor-borda);
+      border-radius: 50px;
+      background: var(--cor-card);
+      color: var(--cor-texto);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transicao);
+    }
+
+    .filtro-btn:hover {
+      border-color: var(--cor-primaria);
+      color: var(--cor-primaria);
+    }
+
+    .filtro-btn.ativo {
+      background: var(--cor-primaria);
+      color: white;
+      border-color: var(--cor-primaria);
+    }
+
+    .filtros-separador {
+      width: 1px;
+      height: 24px;
+      background: var(--cor-borda);
+      margin: 0 0.5rem;
+    }
+
+    /* ══════════════════════════════════════
+       GRID DE CARDS
+       ══════════════════════════════════════ */
+    .grid-container {
+      max-width: 1100px;
+      margin: 1rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .sem-resultados {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--cor-texto-leve);
+      font-size: 1.1rem;
+      display: none;
+    }
+
+    /* ══════════════════════════════════════
+       CARD
+       ══════════════════════════════════════ */
+    .card {
+      background: var(--cor-card);
+      border-radius: var(--raio);
+      box-shadow: var(--sombra-card);
+      overflow: hidden;
+      transition: var(--transicao);
+      border: 1px solid var(--cor-borda);
+    }
+
+    .card:hover {
+      box-shadow: var(--sombra-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-badge .nivel {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.7);
+    }
+
+    /* cores por componente */
+    .card[data-componente="fisica"] .card-badge {
+      background: var(--cor-fisica-bg);
+      color: var(--cor-fisica);
+    }
+    .card[data-componente="arte"] .card-badge {
+      background: var(--cor-arte-bg);
+      color: var(--cor-arte);
+    }
+    .card[data-componente="matematica"] .card-badge {
+      background: var(--cor-matematica-bg);
+      color: var(--cor-matematica);
+    }
+    .card[data-componente="biologia"] .card-badge {
+      background: var(--cor-biologia-bg);
+      color: var(--cor-biologia);
+    }
+    .card[data-componente="eddigital"] .card-badge {
+      background: var(--cor-eddigital-bg);
+      color: var(--cor-eddigital);
+    }
+    .card[data-componente="historia"] .card-badge {
+      background: var(--cor-historia-bg);
+      color: var(--cor-historia);
+    }
+
+    .card-body {
+      padding: 1.2rem;
+    }
+
+    .card-titulo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--cor-texto);
+    }
+
+    .card-resumo {
+      font-size: 0.9rem;
+      color: var(--cor-texto-leve);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.82rem;
+      color: var(--cor-texto-leve);
+    }
+
+    .card-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      background: var(--cor-tag-bg);
+      color: var(--cor-tag-texto);
+      border-radius: 50px;
+      font-weight: 500;
+    }
+
+    /* ══════════════════════════════════════
+       DETALHES EXPANSÍVEIS
+       ══════════════════════════════════════ */
+    .card-detalhes {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      padding: 0 1.2rem;
+      background: #FAFAFA;
+      border-top: 1px solid transparent;
+    }
+
+    .card-detalhes.aberto {
+      max-height: 600px;
+      padding: 1rem 1.2rem;
+      border-top: 1px solid var(--cor-borda);
+    }
+
+    .detalhe-secao {
+      margin-bottom: 0.8rem;
+    }
+
+    .detalhe-secao h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: var(--cor-primaria);
+      margin-bottom: 0.3rem;
+    }
+
+    .detalhe-secao p,
+    .detalhe-secao ul {
+      font-size: 0.85rem;
+      color: var(--cor-texto-leve);
+    }
+
+    .detalhe-secao ul {
+      padding-left: 1.2rem;
+    }
+
+    .detalhe-secao li {
+      margin-bottom: 0.2rem;
+    }
+
+    /* ══════════════════════════════════════
+       BOTÕES DO CARD
+       ══════════════════════════════════════ */
+    .card-acoes {
+      display: flex;
+      gap: 0.6rem;
+      padding: 0 1.2rem 1.2rem;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 0.65rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: var(--transicao);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .btn-detalhes {
+      background: var(--cor-secundaria);
+      color: var(--cor-primaria);
+    }
+
+    .btn-detalhes:hover {
+      background: #E8E0F0;
+    }
+
+    .btn-quero {
+      background: var(--cor-primaria);
+      color: white;
+    }
+
+    .btn-quero:hover {
+      background: var(--cor-primaria-hover);
+    }
+
+    /* ══════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════ */
+    .footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--cor-texto-leve);
+      border-top: 1px solid var(--cor-borda);
+    }
+
+    .footer a {
+      color: var(--cor-primaria);
+      text-decoration: none;
+    }
+
+    /* ══════════════════════════════════════
+       RESPONSIVO
+       ══════════════════════════════════════ */
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 1.4rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filtros {
+        justify-content: center;
+      }
+
+      .filtros-separador {
+        display: none;
+      }
+
+      .card-acoes {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <header class="header">
+    <span class="emoji-titulo">🔧</span>
+    <h1>Catálogo de Projetos — Sala Maker</h1>
+    <p>Escolha um projeto e envie sua proposta em menos de 1 minuto!</p>
+  </header>
+
+  <!-- ═══════════ FILTROS ═══════════ -->
+  <div class="filtros-container">
+    <div class="filtros" id="filtros">
+      <label>Filtrar:</label>
+      <button class="filtro-btn ativo" data-filtro="todos">Todos</button>
+      <button class="filtro-btn" data-filtro="fisica">🔬 Física</button>
+      <button class="filtro-btn" data-filtro="arte">🎨 Arte</button>
+      <button class="filtro-btn" data-filtro="matematica">📐 Matemática</button>
+      <button class="filtro-btn" data-filtro="biologia">🌿 Biologia</button>
+      <button class="filtro-btn" data-filtro="eddigital">💻 Ed. Digital</button>
+      <button class="filtro-btn" data-filtro="historia">📜 História</button>
+      <div class="filtros-separador"></div>
+      <label>Custo:</label>
+      <button class="filtro-btn" data-nivel="A">🟢 Baixo</button>
+      <button class="filtro-btn" data-nivel="B">🟡 Médio</button>
+      <button class="filtro-btn" data-nivel="C">🔴 Avançado</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ GRID DE PROJETOS ═══════════ -->
+  <main class="grid-container">
+    <div class="grid" id="grid">
+      <!-- Cards injetados pelo JS -->
+    </div>
+    <div class="sem-resultados" id="semResultados">
+      😕 Nenhum projeto encontrado com esses filtros.<br>
+      Tente outra combinação!
+    </div>
+  </main>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="footer">
+    🔧 Sala Maker — EEB Elfrida Cristino da Silva | Itajaí, SC<br>
+    Dúvidas? Fale com a coordenação. |
+    <a href="index.html">← Voltar ao início</a>
+  </footer>
+
+  <!-- ═══════════ DADOS DOS PROJETOS ═══════════ -->
+  <script>
+    // ─────────────────────────────────────
+    // URL BASE do Form-Proposta de Projeto
+    // ─────────────────────────────────────
+    const FORM_BASE = 'https://docs.google.com/forms/d/e/1FAIpQLSdgC_q7w88LSC1brZ7-zORBtVMt91DYyGW8MZI7HG8rmdZLhA/viewform?usp=pp_url';
+
+    // entry.IDs mapeados
+    const ENTRY = {
+      componente:    'entry.1563990313',
+      titulo:        'entry.697091719',
+      descricao:     'entry.1165834467',
+      oQueFazem:     'entry.526062956',
+      aulas:         'entry.1751913938'
+    };
+
+    // ─────────────────────────────────────
+    // BANCO DE PROJETOS
+    // ─────────────────────────────────────
+    const projetos = [
+      {
+        id: 'fis-001',
+        componente: 'fisica',
+        componenteLabel: '🔬 Física',
+        nivel: 'A',
+        nivelLabel: '🟢 Baixo custo',
+        titulo: 'Ponte de Palitos de Picolé',
+        resumo: 'Alunos projetam e constroem pontes com palitos de picolé, testando resistência com pesos. Aplicam conceitos de forças, estruturas triangulares e distribuição de carga.',
+        aulas: '2 aulas (1h30-1h40)',
+        interdisciplinar: 'Matemática',
+        tags: ['física', 'estruturas', 'engenharia', 'baixo-custo', 'prototipagem'],
+        detalhes: {
+          materiais: [
+            'Palitos de picolé (100-200 por grupo)',
+            'Cola branca ou cola quente',
+            'Barbante',
+            'Pesos para teste (livros, garrafas com água)',
+            'Régua e balança'
+          ],
+          bncc: [
+            'EM13CNT101 — Analisar fenômenos naturais com base em modelos',
+            'EM13CNT301 — Construir questões e realizar investigações'
+          ],
+          cbtc: 'Pensamento científico · Cultura digital · Trabalho e projeto de vida',
+          entrega: 'Ponte funcional + ficha técnica (dimensões, materiais, peso suportado) + apresentação oral do processo',
+          dicaProfessor: 'Defina critérios claros: vão mínimo de 30cm, largura para passar um carrinho de brinquedo. Isso padroniza a avaliação!'
+        },
+        // Dados pré-preenchidos no form
+        formData: {
+          componente: 'Física',
+          titulo: 'Ponte de Palitos de Picolé',
+          descricao: 'Projetar e construir uma ponte usando palitos de picolé, testando resistência com pesos progressivos. Alunos aplicam conceitos de forças, estruturas triangulares e distribuição de carga.',
+          oQueFazem: 'Construir/montar algo físico (maquete, protótipo, objeto)',
+          aulas: '2 aulas (1h30-1h40)'
+        }
+      },
+      {
+        id: 'art-001',
+        componente: 'arte',
+        componenteLabel: '🎨 Artes',
+        nivel: 'A',
+        nivelLabel: '🟢 Baixo custo',
+        titulo: 'Luminária com Materiais Reutilizados',
+        resumo: 'Alunos criam luminárias artísticas usando garrafas PET, papelão, tecido e LED. Exploram luz, cor, forma e sustentabilidade, conectando arte contemporânea com design funcional.',
+        aulas: '3-4 aulas',
+        interdisciplinar: 'Ciências',
+        tags: ['artes', 'sustentabilidade', 'design', 'luz', 'reutilização', 'baixo-custo'],
+        detalhes: {
+          materiais: [
+            'Garrafa PET (diversas formas e tamanhos)',
+            'Papelão e papel celofane colorido',
+            'Tecido ou retalhos',
+            'Tesoura e cola quente',
+            'LED com bateria (ou pisca-pisca simples)',
+            'Tinta acrílica ou guache'
+          ],
+          bncc: [
+            'EM13LGG603 — Expressão em processos de criação artística',
+            'EM13LGG701 — Explorar tecnologias digitais para produção artística'
+          ],
+          cbtc: 'Repertório cultural · Pensamento criativo · Responsabilidade e cidadania',
+          entrega: 'Luminária funcional + memorial descritivo (inspiração, processo, materiais escolhidos) + exposição coletiva na escola',
+          dicaProfessor: 'Peça que tragam materiais de casa na aula anterior. Monte uma "estação de materiais" coletiva — sobras de um grupo viram recurso para outro!'
+        },
+        formData: {
+          componente: 'Artes',
+          titulo: 'Luminária com Materiais Reutilizados',
+          descricao: 'Criar luminárias artísticas usando garrafas PET, papelão, tecido e LED. Explorar luz, cor, forma e sustentabilidade, conectando arte contemporânea com design funcional.',
+          oQueFazem: 'Construir/montar algo físico (maquete, protótipo, objeto)',
+          aulas: '3-4 aulas'
+        }
+      }
+    ];
+
+    // ─────────────────────────────────────
+    // GERAR LINK PRÉ-PREENCHIDO
+    // ─────────────────────────────────────
+    function gerarLinkForm(projeto) {
+      const params = new URLSearchParams();
+      params.set(ENTRY.componente, projeto.formData.componente);
+      params.set(ENTRY.titulo, projeto.formData.titulo);
+      params.set(ENTRY.descricao, projeto.formData.descricao);
+      params.set(ENTRY.oQueFazem, projeto.formData.oQueFazem);
+      params.set(ENTRY.aulas, projeto.formData.aulas);
+      return FORM_BASE + '&' + params.toString();
+    }
+
+    // ─────────────────────────────────────
+    // RENDERIZAR CARD
+    // ─────────────────────────────────────
+    function renderCard(projeto) {
+      const linkForm = gerarLinkForm(projeto);
+      const tagsHTML = projeto.tags.map(t => `<span class="tag">${t}</span>`).join('');
+      const materiaisHTML = projeto.detalhes.materiais.map(m => `<li>${m}</li>`).join('');
+      const bnccHTML = projeto.detalhes.bncc.map(b => `<li>${b}</li>`).join('');
+
+      return `
+        <article class="card" data-componente="${projeto.componente}" data-nivel="${projeto.nivel}" data-id="${projeto.id}">
+          <div class="card-badge">
+            <span>${projeto.componenteLabel}</span>
+            <span class="nivel">${projeto.nivelLabel}</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-titulo">${projeto.titulo}</h3>
+            <p class="card-resumo">${projeto.resumo}</p>
+            <div class="card-meta">
+              <span>⏱ ${projeto.aulas}</span>
+              <span>📦 ${projeto.nivelLabel.split(' ').slice(1).join(' ')}</span>
+              <span>🔗 +${projeto.interdisciplinar}</span>
+            </div>
+            <div class="card-tags">${tagsHTML}</div>
+          </div>
+          <div class="card-detalhes" id="det-${projeto.id}">
+            <div class="detalhe-secao">
+              <h4>📦 Materiais necessários</h4>
+              <ul>${materiaisHTML}</ul>
+            </div>
+            <div class="detalhe-secao">
+              <h4>📚 Competências BNCC</h4>
+              <ul>${bnccHTML}</ul>
+            </div>
+            <div class="detalhe-secao">
+              <h4>🎯 CBTC</h4>
+              <p>${projeto.detalhes.cbtc}</p>
+            </div>
+            <div class="detalhe-secao">
+              <h4>📝 Entrega dos alunos</h4>
+              <p>${projeto.detalhes.entrega}</p>
+            </div>
+            <div class="detalhe-secao">
+              <h4>💡 Dica para o professor</h4>
+              <p>${projeto.detalhes.dicaProfessor}</p>
+            </div>
+          </div>
+          <div class="card-acoes">
+            <button class="btn btn-detalhes" onclick="toggleDetalhes('${projeto.id}', this)">
+              👁 Ver detalhes
+            </button>
+            <a class="btn btn-quero" href="${linkForm}" target="_blank" rel="noopener">
+              🚀 Quero este projeto!
+            </a>
+          </div>
+        </article>
+      `;
+    }
+
+    // ─────────────────────────────────────
+    // TOGGLE DETALHES
+    // ─────────────────────────────────────
+    function toggleDetalhes(id, btn) {
+      const det = document.getElementById('det-' + id);
+      const aberto = det.classList.toggle('aberto');
+      btn.innerHTML = aberto ? '✕ Fechar detalhes' : '👁 Ver detalhes';
+    }
+
+    // ─────────────────────────────────────
+    // FILTROS
+    // ─────────────────────────────────────
+    let filtroComponente = 'todos';
+    let filtroNivel = null;
+
+    function aplicarFiltros() {
+      const cards = document.querySelectorAll('.card');
+      let visiveis = 0;
+
+      cards.forEach(card => {
+        const comp = card.dataset.componente;
+        const nivel = card.dataset.nivel;
+        const matchComp = filtroComponente === 'todos' || comp === filtroComponente;
+        const matchNivel = !filtroNivel || nivel === filtroNivel;
+
+        if (matchComp && matchNivel) {
+          card.style.display = '';
+          visiveis++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      document.getElementById('semResultados').style.display =
+        visiveis === 0 ? 'block' : 'none';
+    }
+
+    // Event listeners dos filtros
+    document.getElementById('filtros').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filtro-btn');
+      if (!btn) return;
+
+      // Filtro de componente
+      if (btn.dataset.filtro !== undefined) {
+        document.querySelectorAll('[data-filtro]').forEach(b => b.classList.remove('ativo'));
+        btn.classList.add('ativo');
+        filtroComponente = btn.dataset.filtro;
+      }
+
+      // Filtro de nível
+      if (btn.dataset.nivel !== undefined) {
+        if (btn.classList.contains('ativo')) {
+          btn.classList.remove('ativo');
+          filtroNivel = null;
+        } else {
+          document.querySelectorAll('[data-nivel]').forEach(b => b.classList.remove('ativo'));
+          btn.classList.add('ativo');
+          filtroNivel = btn.dataset.nivel;
+        }
+      }
+
+      aplicarFiltros();
+    });
+
+    // ─────────────────────────────────────
+    // INICIALIZAR
+    // ─────────────────────────────────────
+    function init() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = projetos.map(renderCard).join('');
+    }
+
+    init();
+  </script>
+
+</body>
+</html>
